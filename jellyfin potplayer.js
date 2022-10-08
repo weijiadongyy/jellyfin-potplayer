@@ -15,10 +15,18 @@
       if (r.Path) {
         let path = "\\\\DS418p" + r.Path.replace(/\//g, '\\');
         console.log(path);
-        if (!ws) {
+        
+        if(ws.readyState == WebSocket.OPEN) {
+          ws.send(path)
+        } else {
           ws = new WebSocket("ws://127.0.0.1:61142/play")
+          setTimeout(()=>{
+            ws.send(path)
+          }, 100)
         }
-        ws.send(path)
+
+       
+    
         //window.open('potplayer://' + path)
       } else {
         ApiClient.getItems(userid, itemid).then(r => openPotplayer(r.Items[0].Id));
