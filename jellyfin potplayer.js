@@ -3,7 +3,7 @@
 // @version      0.1
 // @description  play video with Potplayer
 // @author       SeriousSnow
-// @match        http://192.168.88.2:7360/web/index.html
+// @match        https://jellyfin.xxxxx.xxx/web/index.html
 // ==/UserScript==
 
 (function () {
@@ -13,9 +13,11 @@
     let userid = (await ApiClient.getCurrentUser()).Id;
     ApiClient.getItem(userid, itemid).then(r => {
       if (r.Path) {
-        let path = "\\\\DS418p" + r.Path.replace(/\//g, '\\');
+        let pathArr = r.Path.replace(/\//g, '\\').split(":");
+        pathArr[0] = "\\\\ESXI-WIN10"
+        let path = pathArr.join("")
         console.log(path);
-        
+
         if(ws.readyState == WebSocket.OPEN) {
           ws.send(path)
         } else {
@@ -25,8 +27,8 @@
           }, 100)
         }
 
-       
-    
+
+
         //window.open('potplayer://' + path)
       } else {
         ApiClient.getItems(userid, itemid).then(r => openPotplayer(r.Items[0].Id));
